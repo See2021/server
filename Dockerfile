@@ -6,4 +6,9 @@ COPY . .
 COPY ./public ./public
 RUN npx prisma generate
 EXPOSE 3000
-CMD npm start
+
+#looking for mysql is it avaliable, hen run prisma mitgrate 
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
