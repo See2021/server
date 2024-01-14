@@ -1,8 +1,19 @@
 docker design structure:
 docker_dir
-- server_dir
--- Dockerfile
-- compose.yaml
+├── server
+│   ├── src
+│   │   ├──  ...  (NestJS application source code)
+│   │   └──  ...
+│   ├── public
+│   │   ├──  tree (Tree images storage)
+│   │   └──  ...  (Farm images storage)
+│   ├── package.json
+│   ├── .dockerignore
+│   ├── prisma
+│   │   ├── schema.prisma
+│   │   └── migrations
+│   └── Dockerfile
+└── compose.yaml
 #--------------------------------#
 
 version: "3.8"
