@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Farm {
+  id                    Int             @id @default(autoincrement())
+  farm_name             String          @db.VarChar(255)
+  farm_location         String          @db.VarChar(255)
+  farm_province         String          @db.VarChar(255)
+  farm_durian_species   String          @db.VarChar(255)
+  farm_photo            String?
+  farm_status           Boolean
+  farm_pollination_date DateTime
+  farm_tree             Int
+  farm_space            Int
+  latitude              Float
+  longtitude            Float
+  duian_amount          Int
+  diseases              Disease[]
+  predictions           Prediction[]
+  trees                 Tree[]
+  usersFarms            UserFarmTable[]
+}
+
+model Tree {
+  id             Int          @id @default(autoincrement())
+  farm_id        Int
+  tree_collected Int?         @default(0)
+  tree_ready     Int?         @default(0)
+  tree_notReady  Int?         @default(0)
+  created_at     DateTime     @default(now())
+  diseases       Disease[]
+  predictions    Prediction[]
+  farm           Farm         @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  treePhotos     TreePhoto[]
+
+  @@index([farm_id], map: "Tree_farm_id_fkey")
+}
+
+model Prediction {
+  id                Int      @id @default(autoincrement())
+  farm_id           Int
+  tree_id           Int
+  tree_ready_amount Int
+  tree_ready_in     DateTime
+  change            Int
+  percent_change    Int
+  created_at        DateTime @default(now())
+  farm              Farm     @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  tree              Tree     @relation(fields: [tree_id], references: [id])
+
+  @@index([farm_id], map: "Prediction_farm_id_fkey")
+  @@index([tree_id], map: "Prediction_tree_id_fkey")
+}
+
+model User {
+  user_id       Int             @id @default(autoincrement())
+  username      String          @unique
+  email         String          @db.VarChar(50)
+  password_hash String
+  created_at    DateTime        @default(now())
+  user_role     Int
+  userFarms     UserFarmTable[]
+}
+
+model UserFarmTable {
+  user_farm_id Int  @id @default(autoincrement())
+  user_id      Int
+  farm_id      Int
+  farm         Farm @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  user         User @relation(fields: [user_id], references: [user_id])
+
+  @@index([farm_id], map: "UserFarmTable_farm_id_fkey")
+  @@index([user_id], map: "UserFarmTable_user_id_fkey")
+}
+
+model Disease {
+  id         Int      @id @default(autoincrement())
+  farm_id    Int
+  tree_id    Int
+  disease    Int
+  created_at DateTime @default(now())
+  farm       Farm     @relation(fields: [farm_id], references: [id], onDelete: Cascade)
+  tree       Tree     @relation(fields: [tree_id], references: [id])
+
+  @@index([farm_id], map: "Disease_farm_id_fkey")
+  @@index([tree_id], map: "Disease_tree_id_fkey")
+}
+
+model TreePhoto {
+  id              Int      @id @default(autoincrement())
+  tree_id         Int
+  tree_photo_path String?
+  created_at      DateTime @default(now())
+  tree            Tree     @relation(fields: [tree_id], references: [id])
+
+  @@index([tree_id], map: "TreePhoto_tree_id_fkey")
+}
