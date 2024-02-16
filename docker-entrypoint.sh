@@ -9,5 +9,8 @@ done
 # Run Prisma migration
 npx prisma migrate dev --name init
 
+# Start Prisma Studio in the background
+nohup npx prisma studio &
+
 # Start the NestJS application
-exec npm start
+exec npm run start:prod

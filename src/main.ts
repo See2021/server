@@ -28,7 +28,7 @@ async function bootstrap() {
   });
 
   app.useStaticAssets(path.resolve('./public'), { prefix: '/public' });
-  await app.listen(3001);
+  await app.listen(4000);
 }
 
 bootstrap();

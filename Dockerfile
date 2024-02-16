@@ -5,7 +5,7 @@ RUN npm install
 COPY . .
 COPY ./public ./public
 RUN npx prisma generate
-EXPOSE 3000
+EXPOSE 4000
 
 #looking for mysql is it avaliable, hen run prisma mitgrate 
 COPY docker-entrypoint.sh /usr/local/bin/
