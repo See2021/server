@@ -26,6 +26,7 @@ CREATE TABLE `Tree` (
     `tree_notReady` INTEGER NULL DEFAULT 0,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
+    INDEX `Tree_farm_id_fkey`(`farm_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -40,6 +41,8 @@ CREATE TABLE `Prediction` (
     `percent_change` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
+    INDEX `Prediction_farm_id_fkey`(`farm_id`),
+    INDEX `Prediction_tree_id_fkey`(`tree_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -62,6 +65,8 @@ CREATE TABLE `UserFarmTable` (
     `user_id` INTEGER NOT NULL,
     `farm_id` INTEGER NOT NULL,
 
+    INDEX `UserFarmTable_farm_id_fkey`(`farm_id`),
+    INDEX `UserFarmTable_user_id_fkey`(`user_id`),
     PRIMARY KEY (`user_farm_id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -73,6 +78,8 @@ CREATE TABLE `Disease` (
     `disease` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
+    INDEX `Disease_farm_id_fkey`(`farm_id`),
+    INDEX `Disease_tree_id_fkey`(`tree_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -83,6 +90,7 @@ CREATE TABLE `TreePhoto` (
     `tree_photo_path` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
+    INDEX `TreePhoto_tree_id_fkey`(`tree_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -96,10 +104,10 @@ ALTER TABLE `Prediction` ADD CONSTRAINT `Prediction_farm_id_fkey` FOREIGN KEY (`
 ALTER TABLE `Prediction` ADD CONSTRAINT `Prediction_tree_id_fkey` FOREIGN KEY (`tree_id`) REFERENCES `Tree`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `UserFarmTable` ADD CONSTRAINT `UserFarmTable_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserFarmTable` ADD CONSTRAINT `UserFarmTable_farm_id_fkey` FOREIGN KEY (`farm_id`) REFERENCES `Farm`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `UserFarmTable` ADD CONSTRAINT `UserFarmTable_farm_id_fkey` FOREIGN KEY (`farm_id`) REFERENCES `Farm`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `UserFarmTable` ADD CONSTRAINT `UserFarmTable_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Disease` ADD CONSTRAINT `Disease_farm_id_fkey` FOREIGN KEY (`farm_id`) REFERENCES `Farm`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
